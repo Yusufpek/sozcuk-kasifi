@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../sabitler/yaziStilleri.dart';
 
 class YazilanHarfWidget extends StatelessWidget with TextStyles {
-  final String harf;
+  final String? harf;
   YazilanHarfWidget(this.harf);
   @override
   Widget build(BuildContext context) {

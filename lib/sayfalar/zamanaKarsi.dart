@@ -15,23 +15,25 @@ class ZamanaKarsi extends StatefulWidget {
 class _ZamanaKarsiState extends State<ZamanaKarsi> with TextStyles, Texts {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<EglenceModuSozcuk> sozcukler = Sorular().eglenceModuSozcukler;
-  EglenceModuSozcuk sozcuk;
+  late List<EglenceModuSozcuk> sozcukler;
+  late EglenceModuSozcuk sozcuk;
   int _soruSayisi = -1, _zaman = 100, _puan = 0, _pasHakki = 5;
   bool zamanAkiyorMu = false, ilkPasArtir = true, ikiPasArtir = true;
   String k1 = "", k2 = "", k3 = "", ipucu = "", cevap = "";
   //
-  Timer _timer;
+  late Timer _timer;
   Color zamanRengi = Colors.cyan, butonRengi1 = Colors.green, butonRengi2 = Colors.blue;
 
   @override
   void initState() {
+    sozcukler = Sorular().eglenceModuSozcukler;
     sozcukler.shuffle();
+    sozcuk = sozcukler[0];
     super.initState();
   }
 
   void _showScaffold(String message, Color renk) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    _scaffoldKey.currentState!.showSnackBar(SnackBar(
       elevation: 5,
       content: Text(message, textAlign: TextAlign.center),
       backgroundColor: renk,
@@ -119,7 +121,7 @@ class _ZamanaKarsiState extends State<ZamanaKarsi> with TextStyles, Texts {
   void ipuclariniYazdir() {
     try {
       setState(() {
-        sozcuk = sozcukler[_soruSayisi - 1];
+        sozcuk = sozcukler[_soruSayisi];
         aciklama = Text(
           "${sozcuk.aciklama}",
           style: ipucuStili,
@@ -127,7 +129,7 @@ class _ZamanaKarsiState extends State<ZamanaKarsi> with TextStyles, Texts {
       });
     } catch (e) {
       aciklama = Text("");
-      print("Hata " + e);
+      print("Hata " + e.toString());
     }
   }
 

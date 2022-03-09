@@ -18,8 +18,15 @@ class NormalOyunModu extends StatefulWidget {
 class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  @override
+  void initState() {
+    sozcukler = Sorular().normalModSoczukler;
+    sozcuk = sozcukler[0];
+    super.initState();
+  }
+
   void _showScaffold(String message, Color renk) {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    _scaffoldKey.currentState!.showSnackBar(SnackBar(
       elevation: 5,
       content: Text(message, textAlign: TextAlign.center),
       backgroundColor: renk,
@@ -27,15 +34,15 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
     ));
   }
 
-  List<Sozcuk> sozcukler = Sorular().normalModSoczukler;
-  NormalModSozcuk sozcuk;
+  late List<NormalModSozcuk> sozcukler;
+  late NormalModSozcuk sozcuk;
   int _soruSayisi = -1, _zaman = 30, _puan = 0, _pasHakki = 5, _kazanilacakPuan = 8;
   bool zamanAkiyorMu = false, ikinciAktif = false, ipucu1Acik = false, ipucu2Acik = false;
   //ikinci aktif 1. ipucu açıldıktan sonra açılacak
-  String k1 = "", k2 = "", k3 = "", k4 = "", dogruluk, bitisNedeni;
+  String? k1 = "", k2 = "", k3 = "", k4 = "", dogruluk, bitisNedeni;
   //
   // ignore: unused_field
-  Timer _timer;
+  late Timer _timer;
   Color zamanRengi = Colors.orange, butonRengi1 = Colors.green, butonRengi2 = Colors.blue;
   void _zamaniAzalt() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -90,13 +97,21 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
 
   void soruSayisiniArtir() {
     setState(() {
-      _soruSayisi++;
+      try {
+        _soruSayisi++;
+        if (_soruSayisi < sozcukler.length) {
+          sozcuk = sozcukler[_soruSayisi];
+          _kazanilacakPuan = sozcuk.puan;
+        }
+      } catch (e) {
+        print("Hata " + e.toString());
+      }
       sifirla();
     });
   }
 
   void kontrolEt() {
-    String yazilanSozcuk = (k1 + k2 + k3 + k4);
+    String yazilanSozcuk = (k1! + k2! + k3! + k4!);
     if (yazilanSozcuk == null || yazilanSozcuk == "") {
       dogruluk = "bos";
     } else if (sozcuk.kontrolEt(yazilanSozcuk)) {
@@ -123,16 +138,6 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
 
   TextStyle ipucuStili =
       TextStyle(color: Colors.white, fontSize: 16, fontFamily: "Times New Roman");
-  void ipuclariniYazdir() {
-    try {
-      if (_soruSayisi < sozcukler.length) {
-        sozcuk = sozcukler[_soruSayisi];
-        _kazanilacakPuan = sozcuk.puan;
-      }
-    } catch (e) {
-      print("Hata " + e);
-    }
-  }
 
   Widget oyun() {
     if (_soruSayisi == -1) {
@@ -161,8 +166,8 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
                 color: Colors.deepOrange,
                 onPressed: () {
                   setState(() {
+                    soruSayisiniArtir();
                     _zamaniAzalt();
-                    _soruSayisi = 1;
                   });
                 },
               ),
@@ -174,7 +179,7 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
       zamanAkiyorMu = false;
       if (_zaman <= 0) {
         bitisNedeni = "Süreniz Doldu";
-      } else if (_soruSayisi >= 43) {
+      } else if (_soruSayisi >= sozcukler.length) {
         bitisNedeni = "Tebrikler tüm soruları gördünüz";
       } else {
         bitisNedeni = "";
@@ -194,7 +199,7 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
               padding: EdgeInsets.all(20),
               color: Colors.deepOrange,
               child: Text(
-                "Gördüğünüz Soru Sayısı : $_soruSayisi \nPuanınız: $_puan",
+                "Gördüğünüz Soru Sayısı : ${_soruSayisi + 1} \nPuanınız: $_puan",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               )),
           Container(
@@ -249,8 +254,8 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   FloatingActionButton(
-                      child:
-                          Text("$_soruSayisi", style: TextStyle(fontSize: 18, color: Colors.white)),
+                      child: Text("${_soruSayisi + 1}",
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
                       onPressed: null),
                   Container(
                       padding: EdgeInsets.all(10),
@@ -295,6 +300,7 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
             flex: 4,
             child: Container(
               padding: EdgeInsets.all(5),
+              width: double.maxFinite,
               color: Colors.orange,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -337,7 +343,7 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
                           if (ipucu2Acik)
                             Container(
                                 padding: EdgeInsets.all(10),
-                                child: _aciklamaWidget(sozcuk.aciklama2)),
+                                child: _aciklamaWidget(sozcuk.aciklama2!)),
                         ],
                       ),
                     ),
