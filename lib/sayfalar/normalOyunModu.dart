@@ -6,7 +6,6 @@ import '../sabitler/sorular.dart';
 import '../sabitler/textler.dart';
 import '../sabitler/yaziStilleri.dart';
 import '../siniflar/normalModSozcuk.dart';
-import '../siniflar/sozcuk_export.dart';
 import '../widgets/harfButonWidget.dart';
 import '../widgets/yazilanHarfWidget.dart';
 
@@ -112,7 +111,7 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
 
   void kontrolEt() {
     String yazilanSozcuk = (k1! + k2! + k3! + k4!);
-    if (yazilanSozcuk == null || yazilanSozcuk == "") {
+    if (yazilanSozcuk == "") {
       dogruluk = "bos";
     } else if (sozcuk.kontrolEt(yazilanSozcuk)) {
       soruSayisiniArtir();
@@ -337,6 +336,7 @@ class _NormalOyunModuState extends State<NormalOyunModu> with TextStyles, Texts 
                               if (ikinciAktif) {
                                 ikinciAktif = false;
                                 ipucu2Acik = true;
+                                _kazanilacakPuan = sozcuk.puan ~/ 2;
                               }
                             },
                           ),

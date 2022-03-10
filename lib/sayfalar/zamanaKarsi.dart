@@ -46,11 +46,11 @@ class _ZamanaKarsiState extends State<ZamanaKarsi> with TextStyles, Texts {
     if (_zaman > 0) {
       setState(() {
         //Yazdırma işlemi
-        if (k1 == null || k1 == "") {
+        if (k1 == "") {
           k1 = str;
-        } else if (k2 == null || k2 == "") {
+        } else if (k2 == "") {
           k2 = str;
-        } else if (k3 == null || k3 == "") {
+        } else if (k3 == "") {
           k3 = str;
           kontrolEt();
         } else {}

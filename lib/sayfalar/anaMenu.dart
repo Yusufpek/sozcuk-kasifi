@@ -12,15 +12,16 @@ class AnaMenu extends StatelessWidget with TextStyles, Texts {
       body: PageView(
         children: <Widget>[
           Container(
-            color: Colors.purple,
+            color: Colors.cyan[200],
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Container(
-                      padding: EdgeInsets.all(20),
-                      color: Colors.orange,
-                      child: Text(baslik, style: yaziStiliAnaBaslik)),
+                    padding: EdgeInsets.all(20),
+                    color: Colors.orange,
+                    child: Text(baslik, style: yaziStiliAnaBaslik),
+                  ),
                   Container(
                       padding: EdgeInsets.symmetric(vertical: 30),
                       color: Colors.orange,
@@ -61,6 +62,7 @@ class AnaMenu extends StatelessWidget with TextStyles, Texts {
                               ),
                             ],
                           ),
+                          SizedBox(height: 20),
                           RaisedButton(
                               color: Colors.deepOrange,
                               child: Text(
